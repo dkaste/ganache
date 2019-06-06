@@ -5,6 +5,9 @@ authors = ["Darren Kaste <darrenkaste@gmail.com>"]
 edition = "2018"
 description = "A simple GUI library"
 license = "GPL-3.0-or-later"
+readme = "README.md"
+repository = "https://github.com/dkaste/ganache"
+documentation = "https://docs.rs/ganache"
 
 [features]
 scalar_i32 = []
