@@ -1,0 +1,11 @@
+[package]
+name = "ganache"
+version = "0.1.0"
+authors = ["Darren Kaste <darrenkaste@gmail.com>"]
+edition = "2018"
+
+[features]
+scalar_i32 = []
+
+[dependencies]
+downcast-rs = "^1.0.4"
