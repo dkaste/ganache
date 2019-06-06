@@ -1,6 +1,8 @@
+//! A simple horizontal or vertical layout with padding and child spacing.
+
 use std::collections::HashMap;
 
-use crate::{scalar, Scalar, SlotId, Slots, Dimensions};
+use crate::{scalar, Scalar, Dimensions, Context, LayoutChildrenArgs, MinimumSizeArgs};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Axis {
@@ -8,16 +10,59 @@ pub enum Axis {
     Vertical,
 }
 
-pub fn default(
-    slots: &mut Slots,
-    slot_id: SlotId,
-    minimum_size_cache: &HashMap<SlotId, Dimensions>,
+pub fn minimum_size<C: Context>(
+    args: MinimumSizeArgs<'_, C>,
+    layout_axis: Axis,
+    padding: Scalar,
+    child_spacing: Scalar,
+) -> Dimensions {
+    let mut minimum_size = Dimensions::zero();
+    let num_children = crate::visible_children(args.slots, args.slot_id).count();
+    let child_spacing = if num_children > 0 {
+        child_spacing * ((num_children - 1) as Scalar)
+    } else {
+        scalar::ZERO
+    };
+    match layout_axis {
+        Axis::Horizontal => {
+            minimum_size.width += padding * scalar::TWO + child_spacing;
+        }
+        Axis::Vertical => {
+            minimum_size.height += padding * scalar::TWO + child_spacing;
+        }
+    }
+    for child_id in crate::visible_children(args.slots, args.slot_id) {
+        let child_minimum_size = args.minimum_size_cache[&child_id];
+        match layout_axis {
+            Axis::Horizontal => {
+                minimum_size.width += child_minimum_size.width;
+                minimum_size.height = minimum_size.height.max(child_minimum_size.height);
+            }
+            Axis::Vertical => {
+                minimum_size.width = minimum_size.width.max(child_minimum_size.width);
+                minimum_size.height += child_minimum_size.height;
+            }
+        }
+    }
+    match layout_axis {
+        Axis::Horizontal => {
+            minimum_size.height += padding * scalar::TWO;
+        }
+        Axis::Vertical => {
+            minimum_size.width += padding * scalar::TWO;
+        }
+    }
+    minimum_size
+}
+
+pub fn layout_children<C: Context>(
+    args: LayoutChildrenArgs<'_, C>,
     layout_axis: Axis,
     padding: Scalar,
     child_spacing: Scalar,
 ) {
-    let bounds = slots.get(slot_id).bounds;
-    let children = crate::visible_children(slots, slot_id).collect::<Vec<_>>();
+    let bounds = args.slots.get(args.slot_id).bounds;
+    let children = crate::visible_children(args.slots, args.slot_id).collect::<Vec<_>>();
     let num_children = children.len();
     let size = match layout_axis {
         Axis::Horizontal => bounds.size.width,
@@ -32,8 +77,8 @@ pub fn default(
     let mut expand_children = Vec::new();
     // Children not set as `expand` will always be their minimum size.
     for child_id in children.iter().rev() {
-        let child = slots.get(*child_id);
-        let child_minimum_size = minimum_size_cache[child_id];
+        let child = args.slots.get(*child_id);
+        let child_minimum_size = args.minimum_size_cache[child_id];
         let (axis_expand, minimum_size) = match layout_axis {
             Axis::Horizontal => (child.info.expand_x, child_minimum_size.width),
             Axis::Vertical => (child.info.expand_y, child_minimum_size.height),
@@ -73,7 +118,7 @@ pub fn default(
     };
     let mut offset = padding;
     for (i, child_id) in children.iter().enumerate() {
-        let child = slots.get_mut(*child_id);
+        let child = args.slots.get_mut(*child_id);
         let other_expand = match layout_axis {
             Axis::Horizontal => child.info.expand_y,
             Axis::Vertical => child.info.expand_x,
@@ -82,7 +127,7 @@ pub fn default(
             .get(child_id)
             .cloned()
             .unwrap_or(regular_size);
-        let child_minimum_size = minimum_size_cache[child_id];
+        let child_minimum_size = args.minimum_size_cache[child_id];
         match layout_axis {
             Axis::Horizontal => {
                 child.bounds.x = offset;

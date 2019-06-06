@@ -1,6 +1,6 @@
 #![warn(rust_2018_idioms)]
 
-pub mod layout;
+pub mod default_layout;
 mod theme;
 
 pub use self::theme::{SlotStyle, Theme};
