@@ -3,6 +3,8 @@ name = "ganache"
 version = "0.1.0"
 authors = ["Darren Kaste <darrenkaste@gmail.com>"]
 edition = "2018"
+description = "A simple GUI library"
+license = "GPL-3.0-or-later"
 
 [features]
 scalar_i32 = []
