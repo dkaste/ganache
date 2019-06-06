@@ -693,7 +693,7 @@ impl<C: Context> Gui<C> {
             self.process_event_recursive(*child_id, theme, event, signals);
         }
 
-        event.offset_coordinates(bounds.x, bounds.x);
+        event.offset_coordinates(bounds.x, bounds.y);
         let slot = self.slots.get(slot_id);
         let slot_bounds = slot.bounds;
         if let Some(widget_id) = slot.widget_id {
