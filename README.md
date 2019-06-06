@@ -1,4 +1,4 @@
-# ganache [![](https://img.shields.io/crates/v/ganache.svg)](https://crates.io/crates/ganache)
+# ganache [![](https://img.shields.io/crates/v/ganache.svg)](https://crates.io/crates/ganache) [![](https://docs.rs/ganache/badge.svg)](https://docs.rs/ganache)
 A simple GUI library for Rust
 
 This library draws its main inspiration from the [Godot](https://godotengine.org/) game engine's GUI solution.
