@@ -14,3 +14,6 @@ scalar_i32 = []
 
 [dependencies]
 downcast-rs = "^1.0.4"
+
+[dev-dependencies]
+ggez = "^0.5.0-rc.2"
