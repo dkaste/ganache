@@ -1,6 +1,6 @@
 [package]
 name = "ganache"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Darren Kaste <darrenkaste@gmail.com>"]
 edition = "2018"
 description = "A simple GUI library"
