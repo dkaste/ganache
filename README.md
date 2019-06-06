@@ -1,4 +1,4 @@
-# ganache ![](https://img.shields.io/crates/v/ganache.svg)
+# ganache [![](https://img.shields.io/crates/v/ganache.svg)](https://crates.io/crates/ganache)
 A simple GUI library for Rust
 
 ### Features
