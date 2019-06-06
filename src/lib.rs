@@ -69,6 +69,11 @@ impl Bounds {
             size: Dimensions::zero(),
         }
     }
+
+    pub fn contains_point(&self, x: Scalar, y: Scalar) -> bool {
+        x > self.x && x < self.x + self.size.width
+            && y > self.y && y < self.y + self.size.height
+    }
 }
 
 pub trait InputEvent {
