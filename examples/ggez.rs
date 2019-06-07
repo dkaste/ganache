@@ -28,11 +28,7 @@ impl ganache::Context for GuiContext {
     type InputEvent = GuiInputEvent;
 }
 
-struct Panel {
-    padding: ganache::Scalar,
-    child_spacing: ganache::Scalar,
-    layout_axis: ganache::default_layout::Axis,
-}
+struct Panel(ganache::default_layout::Settings);
 
 impl ganache::Widget<GuiContext> for Panel {
     fn kind_id(&self) -> &'static str {
@@ -44,13 +40,11 @@ impl ganache::Widget<GuiContext> for Panel {
     }
 
     fn minimum_size(&self, args: ganache::MinimumSizeArgs<'_, GuiContext>) -> ganache::Dimensions {
-        ganache::default_layout::minimum_size(
-            args, self.layout_axis, self.padding, self.child_spacing)
+        ganache::default_layout::minimum_size(&args, &self.0)
     }
 
-    fn layout_children(&self, args: ganache::LayoutChildrenArgs<'_, GuiContext>) {
-        ganache::default_layout::layout_children(
-            args, self.layout_axis, self.padding, self.child_spacing)
+    fn layout_children(&self, mut args: ganache::LayoutChildrenArgs<'_, GuiContext>) {
+        ganache::default_layout::layout_children(&mut args, &self.0)
     }
 
     fn process_event(
@@ -148,11 +142,11 @@ fn main() -> GameResult<()> {
             minimum_size: ganache::Dimensions::new(400.0, 300.0),
             ..Default::default()
         },
-        Panel {
+        Panel(ganache::default_layout::Settings {
             padding: 5.0,
             child_spacing: 2.0,
-            layout_axis: ganache::default_layout::Axis::Horizontal,
-        },
+            axis: ganache::default_layout::Axis::Horizontal,
+        }),
     );
 
     gui.add_slot_with_widget(
