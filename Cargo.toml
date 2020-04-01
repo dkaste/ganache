@@ -1,10 +1,10 @@
 [package]
 name = "ganache"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Darren Kaste <darrenkaste@gmail.com>"]
 edition = "2018"
 description = "A simple GUI library"
-license = "GPL-3.0-or-later"
+license = "MIT"
 readme = "README.md"
 repository = "https://github.com/dkaste/ganache"
 documentation = "https://docs.rs/ganache"
